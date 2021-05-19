@@ -1,12 +1,14 @@
 package com.example.notes;
 
+import java.io.Serializable;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 
-public class Note {
+public class Note implements Serializable {
     private String header;
     private String description;
     private String note;
+    private long date;
     GregorianCalendar dateOfCreation;
 
     private Note() {
@@ -19,9 +21,14 @@ public class Note {
         return description;
     }
 
-    public String getNote() {
+    public String getNoteText() {
         return note;
     }
+
+    public void setDate(Calendar cal) {
+        date=cal.getTimeInMillis();
+    }
+
     public static NoteBuilder getBuilder() {
         return new Note().new NoteBuilder();
     }
@@ -38,7 +45,7 @@ public class Note {
             Note.this.description = description;
             return this;
         }
-        public NoteBuilder setNote(String Note) {
+        public NoteBuilder setNote(String note) {
             Note.this.note = note;
             return this;
         }
