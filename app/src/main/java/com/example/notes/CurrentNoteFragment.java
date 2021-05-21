@@ -8,7 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-
+//фрагмент вывода содержимого одной заметки
 
 public class CurrentNoteFragment extends Fragment {
     public static final String NOTE_PARAM = "NoteParam";

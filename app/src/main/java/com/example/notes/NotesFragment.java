@@ -18,9 +18,12 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.time.Month;
+import java.time.Year;
 import java.util.Calendar;
 
 import static com.example.notes.NotesArray.*;
+//Фрагмент для вывода заголовков заметок
 
 public class NotesFragment extends Fragment {
     public static final String NOTES_ARRAY_PARAM = "Notes_Array_Param";
@@ -31,8 +34,10 @@ public class NotesFragment extends Fragment {
 
     }
 
-    // TODO: Rename and change types and number of parameters
-    public static NotesFragment newInstance(Note arr) {
+    public static NotesFragment newInstance(NotesArray arr) {
+        //Пока стоит заглушка, но здесь кладем в параметры объект NotesArray,
+        //который должен содержать все заметки, или можем формировать объект NotesArray
+        //из базы данных например
         NotesFragment fragment = new NotesFragment();
         Bundle args = new Bundle();
         args.putSerializable(NOTES_ARRAY_PARAM, arr);
@@ -43,6 +48,7 @@ public class NotesFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        //заглушка. Объект NotesArrary должен сам подгружать и сохранять заметки в БД
         if (getArguments() != null) {
             notesArray = (NotesArray) savedInstanceState.getSerializable(NOTES_ARRAY_PARAM);
         } else {
@@ -60,19 +66,17 @@ public class NotesFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_notes, container, false);
     }
 
     @Override
-    public void onViewCreated(@NonNull @org.jetbrains.annotations.NotNull View view,
-                              @Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
+    public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         initNotes(view);
     }
 
     @Override
-    public void onActivityCreated(@Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
+    public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         isLandscapeFlag = getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE;
     }
@@ -93,7 +97,7 @@ public class NotesFragment extends Fragment {
             tv.setOnLongClickListener(new View.OnLongClickListener() {
                 @Override
                 public boolean onLongClick(View v) {
-                    notesArray.getNote(fi).setDate(callDate());
+                    notesArray.getNote(fi).setDate(callDate(notesArray.getNote(fi).getDate()));
                     return false;
                 }
             });
@@ -120,11 +124,11 @@ public class NotesFragment extends Fragment {
                 .replace(R.id.land_fragment_current_note, f)
                 .commit();
     }
-    private Calendar callDate() {
+    private Calendar callDate(Calendar oldDate) {
         Calendar cal = Calendar.getInstance();
-        int mYear = cal.get(Calendar.YEAR);
-        int mMonth = cal.get(Calendar.MONTH);
-        int mDay = cal.get(Calendar.DAY_OF_MONTH);
+        int mYear = oldDate.get(Calendar.YEAR);
+        int mMonth = oldDate.get(Calendar.MONTH);
+        int mDay = oldDate.get(Calendar.DAY_OF_MONTH);
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
             DatePickerDialog d = new DatePickerDialog(getContext(), new DatePickerDialog.OnDateSetListener() {
                 @Override

@@ -3,6 +3,7 @@ package com.example.notes;
 import java.io.Serializable;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
+//Класс заметки
 
 public class Note implements Serializable {
     private String header;
@@ -27,6 +28,9 @@ public class Note implements Serializable {
 
     public void setDate(Calendar cal) {
         date=cal.getTimeInMillis();
+    }
+    public Calendar getDate() {
+        return dateOfCreation;
     }
 
     public static NoteBuilder getBuilder() {

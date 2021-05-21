@@ -4,7 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.res.Configuration;
 import android.os.Bundle;
-
+//Активити для вывода фаргмента с содержимым заметки
 public class CurrentNoteActivity extends AppCompatActivity {
 
     @Override

@@ -2,6 +2,7 @@ package com.example.notes;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+//Класс, который хранит все заметки
 
 public class NotesArray implements Serializable {
     private ArrayList<Note> notesArray;
