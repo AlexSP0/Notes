@@ -11,10 +11,12 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.DatePicker;
 import android.widget.LinearLayout;
+import android.widget.PopupMenu;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -66,7 +68,8 @@ public class NotesFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_notes, container, false);
+        View view = inflater.inflate(R.layout.fragment_notes, container, false);
+        return view;
     }
 
     @Override
@@ -105,25 +108,13 @@ public class NotesFragment extends Fragment {
         }
     }
     private void ShowCurrentNote(Note note) {
-        if(isLandscapeFlag) {
-            ShowLandCurrentNote(note);
-        } else {
-            ShowPortCurrentNote(note);
-        }
-    }
-    private void ShowPortCurrentNote(Note note) {
-        Intent intent = new Intent();
-        intent.setClass(getActivity(), CurrentNoteActivity.class);
-        intent.putExtra(CurrentNoteFragment.NOTE_PARAM, note);
-        startActivity(intent);
-    }
-    private void ShowLandCurrentNote(Note note) {
         CurrentNoteFragment f = CurrentNoteFragment.newInstance(note);
         FragmentManager fragmentManager= requireActivity().getSupportFragmentManager();
         fragmentManager.beginTransaction()
-                .replace(R.id.land_fragment_current_note, f)
+                .replace(R.id.fragment_container, f)
                 .commit();
     }
+
     private Calendar callDate(Calendar oldDate) {
         Calendar cal = Calendar.getInstance();
         int mYear = oldDate.get(Calendar.YEAR);
