@@ -28,41 +28,26 @@ import static com.example.notes.NotesArray.*;
 //Фрагмент для вывода заголовков заметок
 
 public class NotesFragment extends Fragment {
-    public static final String NOTES_ARRAY_PARAM = "Notes_Array_Param";
+
     private NotesArray notesArray;
+    private NotesSettings notesSettings;
     private boolean isLandscapeFlag;
 
     public NotesFragment() {
 
     }
 
-    public static NotesFragment newInstance(NotesArray arr) {
-        //Пока стоит заглушка, но здесь кладем в параметры объект NotesArray,
-        //который должен содержать все заметки, или можем формировать объект NotesArray
-        //из базы данных например
+    public static NotesFragment newInstance(NotesArray arr, NotesSettings settings) {
         NotesFragment fragment = new NotesFragment();
-        Bundle args = new Bundle();
-        args.putSerializable(NOTES_ARRAY_PARAM, arr);
-        fragment.setArguments(args);
+        fragment.notesArray = arr;
+        fragment.notesSettings = settings;
         return fragment;
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //заглушка. Объект NotesArrary должен сам подгружать и сохранять заметки в БД
-        if (getArguments() != null) {
-            notesArray = (NotesArray) savedInstanceState.getSerializable(NOTES_ARRAY_PARAM);
-        } else {
-            //Заглушка!!! Если заметок в массиве нет, то делаем три тестовых заметки.
-            Note n1 = Note.getBuilder().setHeader("Header1").setDescription("Description1").setNote("Note1").build();
-            Note n2 = Note.getBuilder().setHeader("Header2").setDescription("Description2").setNote("Note2").build();
-            Note n3 = Note.getBuilder().setHeader("Header3").setDescription("Description3").setNote("Note3").build();
-            notesArray = new NotesArray();
-            notesArray.addNote(n1);
-            notesArray.addNote(n2);
-            notesArray.addNote(n3);
-        }
+
     }
 
     @Override
@@ -85,34 +70,61 @@ public class NotesFragment extends Fragment {
     }
 
     private void initNotes(View view){
-        LinearLayout linearLayout = (LinearLayout) view;
-        for (int i = 0; i < notesArray.getSize(); i++) {
-            TextView tv = new TextView(getContext());
-            tv.setText(notesArray.getNote(i).getHeader());
-            tv.setTextSize(30);
-            final int fi = i;
-            tv.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    ShowCurrentNote(notesArray.getNote(fi));
-                }
-            });
-            tv.setOnLongClickListener(new View.OnLongClickListener() {
-                @Override
-                public boolean onLongClick(View v) {
-                    notesArray.getNote(fi).setDate(callDate(notesArray.getNote(fi).getDate()));
-                    return false;
-                }
-            });
-            linearLayout.addView(tv);
-        }
+
+//        LinearLayout linearLayout = (LinearLayout) view;
+//        for (int i = 0; i < notesArray.getSize(); i++) {
+//            TextView tv = new TextView(getContext());
+//            tv.setText(notesArray.getNote(i).getHeader());
+//            tv.setTextSize(30);
+//            final int fi = i;
+//            tv.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View v) {
+//                    notesArray.setCurrentNote(fi);
+//                    ((MainActivity)getContext()).navigateFragment(R.id.main_menu_current_note);
+//                }
+//            });
+//            tv.setOnLongClickListener(new View.OnLongClickListener() {
+//                @Override
+//                public boolean onLongClick(View v) {
+//                    notesArray.getNote(fi).setDate(callDate(notesArray.getNote(fi).getDate()));
+//                    return false;
+//                }
+//            });
+//            linearLayout.addView(tv);
+//        }
+        //showList(view);
+
+
     }
-    private void ShowCurrentNote(Note note) {
-        CurrentNoteFragment f = CurrentNoteFragment.newInstance(note);
-        FragmentManager fragmentManager= requireActivity().getSupportFragmentManager();
-        fragmentManager.beginTransaction()
-                .replace(R.id.fragment_container, f)
-                .commit();
+    private void showCards(View view) {
+
+    }
+    private void showList(View view) {
+//        LinearLayout linearLayout = (LinearLayout) view;
+//        LayoutInflater layoutInflater = getLayoutInflater();
+//        for (int i = 0; i < notesArray.getSize(); i++) {
+//            final int fi = i;
+//            View note_header = layoutInflater.inflate(R.layout.note_header, linearLayout, false);
+//            TextView tv = note_header.findViewById(R.id.note_header_textview);
+//            tv.setText(notesArray.getNote(fi).getHeader());
+//            tv.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View v) {
+//                    notesArray.setCurrentNote(fi);
+//                    ((MainActivity)getContext()).navigateFragment(R.id.main_menu_current_note);
+//                }
+//            });
+//            tv.setOnLongClickListener(new View.OnLongClickListener() {
+//                @Override
+//                public boolean onLongClick(View v) {
+//                    notesArray.getNote(fi).setDate(callDate(notesArray.getNote(fi).getDate()));
+//                    return false;
+//                }
+//            });
+//            linearLayout.addView(note_header);
+//        }
+
     }
 
     private Calendar callDate(Calendar oldDate) {

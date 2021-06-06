@@ -4,16 +4,27 @@ import java.io.Serializable;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 //Класс заметки
+//*********************************УБРАТЬ ИНТЕРФЕЙС Serializable*************************************
 
 public class Note implements Serializable {
     private String header;
     private String description;
     private String note;
-    private long date;
-    GregorianCalendar dateOfCreation;
+    private GregorianCalendar dateOfCreation;
+    private boolean isFavorite;
+
 
     private Note() {
     }
+
+    public void clone(Note note) {
+        header = note.getHeader();
+        description = note.getDescription();
+        this.note = note.getNoteText();
+        dateOfCreation = (GregorianCalendar) note.getDate();
+        isFavorite = note.isFavorite();
+    }
+
     public String getHeader() {
         return header;
     }
@@ -26,9 +37,18 @@ public class Note implements Serializable {
         return note;
     }
 
-    public void setDate(Calendar cal) {
-        date=cal.getTimeInMillis();
+    public boolean isFavorite() {
+        return isFavorite;
     }
+
+    public void setFavorite(boolean favorite) {
+        isFavorite = favorite;
+    }
+
+    public void setDate(Calendar cal) {
+        dateOfCreation.setTimeInMillis(cal.getTimeInMillis());
+    }
+
     public Calendar getDate() {
         return dateOfCreation;
     }
@@ -38,7 +58,8 @@ public class Note implements Serializable {
     }
 
     public class NoteBuilder {
-        private NoteBuilder() {        }
+        private NoteBuilder() {
+        }
 
         public NoteBuilder setHeader(String header) {
             Note.this.header = header;
@@ -49,13 +70,16 @@ public class Note implements Serializable {
             Note.this.description = description;
             return this;
         }
+
         public NoteBuilder setNote(String note) {
             Note.this.note = note;
             return this;
         }
+
         public Note build() {
-            if(header != null && description != null) {
+            if (header != null && description != null) {
                 dateOfCreation = new GregorianCalendar();
+                isFavorite = false;
                 return Note.this;
             }
             return null;

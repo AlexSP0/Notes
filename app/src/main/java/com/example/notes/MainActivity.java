@@ -1,11 +1,9 @@
 package com.example.notes;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
-import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
@@ -13,18 +11,26 @@ import android.widget.Toast;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 
 import com.google.android.material.navigation.NavigationView;
 
-import org.jetbrains.annotations.NotNull;
 
 public class MainActivity extends AppCompatActivity {
+    private NotesArray notesArray;
+    private NotesSettings notesSettings;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        notesSettings = new NotesSettings(this);  //Настройки приложения загружаем или создаем, если их нет.
+        notesArray = new NotesArray(); //Загружаем заметки
         setContentView(R.layout.activity_main);
         initView();
+        notesSettings.getSettingsFromSharedPrefs();
+        navigateFragment(R.id.main_drawer_main);
+
     }
 
     private void initView() {
@@ -41,7 +47,7 @@ public class MainActivity extends AppCompatActivity {
         NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+            public boolean onNavigationItemSelected(MenuItem item) {
                 int id = item.getItemId();
                 if (navigateFragment(id)) {
                     drawer.closeDrawer(GravityCompat.START);
@@ -54,7 +60,6 @@ public class MainActivity extends AppCompatActivity {
     private Toolbar initToolbar() {
         Toolbar toolbar = findViewById(R.id.toolbarMain);
         setSupportActionBar(toolbar);
-
         return toolbar;
     }
 
@@ -67,16 +72,48 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    private boolean navigateFragment(int itemId) {
+    public boolean navigateFragment(int itemId) {
+        Fragment fr;
+        FragmentManager manager;
         switch (itemId) {
             case R.id.main_drawer_settings:
-                Toast.makeText(this, "Settings", Toast.LENGTH_SHORT);
+                fr = SettingsFragment.newInstance(notesArray, notesSettings);
+                manager = getSupportFragmentManager();
+                manager.beginTransaction()
+                        .replace(R.id.fragment_container, fr)
+                        .commit();
+                return true;
+            case R.id.main_drawer_add:
+                fr = AddNoteFragment.newInstance(notesArray, notesSettings, NotesSettings.NEW_NOTE_OPTION);
+                manager = getSupportFragmentManager();
+                manager.beginTransaction()
+                        .replace(R.id.fragment_container, fr)
+                        .commit();
+                return true;
+            case R.id.main_drawer_edit:
+                fr = AddNoteFragment.newInstance(notesArray, notesSettings, NotesSettings.EDIT_NOTE_OPTION);
+                manager = getSupportFragmentManager();
+                manager.beginTransaction()
+                        .replace(R.id.fragment_container, fr)
+                        .commit();
                 return true;
             case R.id.main_drawer_main:
-                Toast.makeText(this, "DrawerMain", Toast.LENGTH_LONG);
+                if (notesSettings.set.currentViewOfNotes == NotesSettings.CARD_VIEW) {
+                    fr = NotesCardFragment.newInstance(notesArray, notesSettings);
+                } else {
+                    fr = NotesListFragment.newInstance(notesArray, notesSettings);
+                }
+                manager = getSupportFragmentManager();
+                manager.beginTransaction()
+                        .replace(R.id.fragment_container, fr)
+                        .commit();
                 return true;
-            case R.id.main_drawer_favorite:
-                Toast.makeText(this, "favorite", Toast.LENGTH_LONG);
+            case R.id.main_drawer_about:
+                fr = AboutFragment.newInstance(notesArray, notesSettings);
+                manager = getSupportFragmentManager();
+                manager.beginTransaction()
+                        .replace(R.id.fragment_container, fr)
+                        .commit();
                 return true;
             case R.id.main_menu_search:
                 Toast.makeText(this, "search", Toast.LENGTH_LONG);
@@ -84,8 +121,12 @@ public class MainActivity extends AppCompatActivity {
             case R.id.main_menu_sort:
                 Toast.makeText(this, "sort", Toast.LENGTH_LONG);
                 return true;
-            case R.id.main_menu_3:
-                Toast.makeText(this, "3333333", Toast.LENGTH_LONG);
+            case R.id.main_menu_current_note:
+                fr = CurrentNoteFragment.newInstance(notesArray, notesSettings);
+                manager = getSupportFragmentManager();
+                manager.beginTransaction()
+                        .replace(R.id.fragment_container, fr)
+                        .commit();
                 return true;
             case R.id.current_note_menu_send:
                 Toast.makeText(this, "CurrentNote  Send", Toast.LENGTH_LONG);

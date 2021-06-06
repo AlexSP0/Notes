@@ -17,13 +17,13 @@ import org.jetbrains.annotations.NotNull;
 //фрагмент вывода содержимого одной заметки
 
 public class CurrentNoteFragment extends Fragment {
-    public static final String NOTE_PARAM = "NoteParam";
+    private NotesArray notesArray;
+    private NotesSettings notesSettings;
 
-    public static CurrentNoteFragment newInstance(Note currentNote) {
+    public static CurrentNoteFragment newInstance(NotesArray notesArray, NotesSettings notesSettings) {
         CurrentNoteFragment fragment = new CurrentNoteFragment();
-        Bundle args = new Bundle();
-        args.putSerializable(NOTE_PARAM, currentNote);
-        fragment.setArguments(args);
+        fragment.notesArray = notesArray;
+        fragment.notesSettings = notesSettings;
         return fragment;
     }
 
@@ -38,8 +38,7 @@ public class CurrentNoteFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view =  inflater.inflate(R.layout.fragment_current_note, container, false);
         TextView textview = view.findViewById(R.id.current_note_text);
-        Note note = (Note) getArguments().getSerializable(NOTE_PARAM);
-        textview.setText(note.getNoteText());
+        textview.setText(notesArray.getNote(notesArray.getCurrentNote()).getNoteText());
         setHasOptionsMenu(true);
         return view;
     }

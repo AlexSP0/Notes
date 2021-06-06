@@ -13,7 +13,7 @@
         android:icon="@android:drawable/ic_menu_compass"
         app:showAsAction="always"/>
     <item android:title="3"
-        android:id="@+id/main_menu_3"
+        android:id="@+id/main_menu_current_note"
         android:orderInCategory="10"
         android:icon="@android:drawable/btn_star_big_on"
         app:showAsAction="never"/>
