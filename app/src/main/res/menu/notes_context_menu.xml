@@ -11,4 +11,9 @@
         android:orderInCategory="100"
         android:title="Edit note"
         app:showAsAction="always" />
+    <item
+        android:id="@+id/delete_note_context_menu"
+        android:orderInCategory="100"
+        android:title="Delete note"
+        app:showAsAction="always" />
 </menu>

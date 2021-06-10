@@ -38,6 +38,7 @@ public class NotesArray {
     public void setSuccessListener(NotesDbResponse resp) {
         dbResponse = resp;
     }
+
     public void getNotesFromDb() {
         CollectionReference ref = db.collection(NOTES_COLLECTION);
         ref.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
@@ -67,6 +68,17 @@ public class NotesArray {
         if(dbResponse != null) {
             dbResponse.initialized();
         }
+    }
+    public void deleteNote(int index) {
+        CollectionReference ref = db.collection(NOTES_COLLECTION);
+        DocumentReference docRef = ref.document(getNote(getCurrentNote()).getId());
+        docRef.delete();
+        clearNotes();
+        getNotesFromDb();
+    }
+
+    private void clearNotes() {
+        notesArray = new ArrayList<>();
     }
 
     public void updateNote(Note note) {

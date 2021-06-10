@@ -11,4 +11,8 @@
     <string name="add_note_header_hint">Note header</string>
     <string name="add_note_text_of_note_hint">Text of NOTE</string>
     <string name="add_note_button_text">add note</string>
+    <string name="title_delete_dialog">WARNING!!!</string>
+    <string name="text_delete_dialog">Note will be DELETED</string>
+    <string name="yes_button_delete_dialog">Understand, delete</string>
+    <string name="no_button_delete_dialog">No, let it be</string>
 </resources>

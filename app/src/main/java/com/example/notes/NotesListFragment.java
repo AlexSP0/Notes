@@ -1,5 +1,7 @@
 package com.example.notes;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.res.Configuration;
 import android.os.Bundle;
 
@@ -88,6 +90,9 @@ public class NotesListFragment extends Fragment {
             case R.id.edit_note_context_menu:
                 ((MainActivity) getContext()).navigateFragment(R.id.main_drawer_edit);
                 break;
+            case R.id.delete_note_context_menu:
+                deleteCurrentNote();
+                break;
         }
         return super.onContextItemSelected(item);
     }
@@ -95,15 +100,31 @@ public class NotesListFragment extends Fragment {
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        initNotes(view);
     }
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
     }
-
-    private void initNotes(View view) {
-
+    private void deleteCurrentNote() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        builder.setTitle(R.string.title_delete_dialog)
+                .setMessage(R.string.text_delete_dialog)
+                .setCancelable(false)
+                .setNegativeButton(R.string.no_button_delete_dialog, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        //ничего не делаем, отмена
+                    }
+                })
+                .setPositiveButton(R.string.yes_button_delete_dialog, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        notesArray.deleteNote(notesArray.getCurrentNote());
+                        notesAdapter.notifyDataSetChanged();
+                    }
+                });
+        AlertDialog dl = builder.create();
+        dl.show();
     }
 }
