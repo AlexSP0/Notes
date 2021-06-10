@@ -46,6 +46,12 @@ public class NotesCardFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_notes_card, container, false);
         RecyclerView recyclerView = view.findViewById(R.id.recycler_card);
+        notesArray.setSuccessListener(new NotesDbResponse() {
+            @Override
+            public void initialized() {
+                adapter.notifyDataSetChanged();
+            }
+        });
         initRecyclerView(recyclerView);
         return view;
     }

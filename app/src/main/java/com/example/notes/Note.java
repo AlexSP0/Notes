@@ -4,9 +4,10 @@ import java.io.Serializable;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 //Класс заметки
-//*********************************УБРАТЬ ИНТЕРФЕЙС Serializable*************************************
+
 
 public class Note implements Serializable {
+    private String id;
     private String header;
     private String description;
     private String note;
@@ -18,11 +19,16 @@ public class Note implements Serializable {
     }
 
     public void clone(Note note) {
+        id = note.getId();
         header = note.getHeader();
         description = note.getDescription();
         this.note = note.getNoteText();
         dateOfCreation = (GregorianCalendar) note.getDate();
         isFavorite = note.isFavorite();
+    }
+
+    public String getId() {
+        return id;
     }
 
     public String getHeader() {
@@ -43,6 +49,14 @@ public class Note implements Serializable {
 
     public void setFavorite(boolean favorite) {
         isFavorite = favorite;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public void setNoteText(String text) {
+        note = text;
     }
 
     public void setDate(Calendar cal) {

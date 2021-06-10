@@ -20,6 +20,7 @@ public class NotesListFragment extends Fragment {
 
     private NotesArray notesArray;
     private NotesSettings notesSettings;
+    NotesAdapter notesAdapter;
 
     public NotesListFragment() {
         // Required empty public constructor
@@ -43,6 +44,12 @@ public class NotesListFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.notes_list_fragment, container, false);
         RecyclerView recyclerView = view.findViewById(R.id.recycler_view_lines);
+        notesArray.setSuccessListener(new NotesDbResponse() {
+            @Override
+            public void initialized() {
+                notesAdapter.notifyDataSetChanged();
+            }
+        });
         initRecyclerView(recyclerView, notesArray);
         return view;
     }
@@ -51,7 +58,7 @@ public class NotesListFragment extends Fragment {
         recyclerView.setHasFixedSize(true);
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(layoutManager);
-        NotesAdapter notesAdapter = new NotesAdapter(notesArray, notesSettings, this);
+        notesAdapter = new NotesAdapter(notesArray, notesSettings, this);
         recyclerView.setAdapter(notesAdapter);
         notesAdapter.setOnItemClickListener(new NotesAdapter.OnItemClickListener() {
             @Override

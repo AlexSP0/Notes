@@ -1,25 +1,83 @@
 package com.example.notes;
 
-import java.io.Serializable;
+import android.util.Log;
+
+import androidx.annotation.NonNull;
+
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
+
+import org.jetbrains.annotations.NotNull;
+
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 //Класс, который хранит все заметки
-//********** Убрать Serializable ******************************************
-public class NotesArray implements Serializable {
+public class NotesArray {
     private ArrayList<Note> notesArray;
-    private int size;
     private int currentNote;
+    private FirebaseFirestore db = FirebaseFirestore.getInstance();
+    private NotesDbResponse dbResponse;
+    public static final String NOTES_COLLECTION = "NOTES";
 
     public NotesArray() {
         notesArray = new ArrayList<>();
         currentNote = 0;
-        initDefaultNotes(); //Заглушка, создаем несколько заметок для работы
-        //Далее будет код, загружающий заметки из БД
+        //initDefaultNotes(); //Заглушка, создаем несколько заметок для работы
+        getNotesFromDb();
+    }
+
+    public void setSuccessListener(NotesDbResponse resp) {
+        dbResponse = resp;
+    }
+    public void getNotesFromDb() {
+        CollectionReference ref = db.collection(NOTES_COLLECTION);
+        ref.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(Task<QuerySnapshot> task) {
+                if(task.isSuccessful()) {
+                    for (QueryDocumentSnapshot doc : task.getResult()) {
+                        Map map = doc.getData();
+                        Note note = NoteMapper.toNote(map);
+                        note.setId(doc.getId());
+                        notesArray.add(note);
+                    }
+                    if(dbResponse != null) {
+                        dbResponse.initialized();
+                    }
+                }
+            }
+        });
     }
 
     public void addNote(Note note) {
         notesArray.add(note);
+        CollectionReference ref = db.collection(NOTES_COLLECTION);
+        DocumentReference docRef = ref.document();
+        note.setId(docRef.getId());
+        docRef.set(NoteMapper.toDocument(note));
+        if(dbResponse != null) {
+            dbResponse.initialized();
+        }
     }
+
+    public void updateNote(Note note) {
+        CollectionReference ref = db.collection(NOTES_COLLECTION);
+        DocumentReference docRef = ref.document(note.getId());
+        docRef.set(NoteMapper.toDocument(note));
+        if(dbResponse != null) {
+            dbResponse.initialized();
+        }
+
+   }
 
     public Note getNote(int index) {
         return notesArray.get(index);
@@ -65,5 +123,15 @@ public class NotesArray implements Serializable {
         addNote(builder.setHeader("Заметка №13").setDescription("Описание заметки №13").setNote("Содержание заметки №13").build());
         builder = Note.getBuilder();
         addNote(builder.setHeader("Заметка №14").setDescription("Описание заметки №14").setNote("Содержание заметки №14").build());
+        initExampleBase();
+    }
+
+    private void initExampleBase() { //Заглушка, для первоначальной загрузки заметок в базу данных
+//        FirebaseFirestore store = FirebaseFirestore.getInstance();
+//        CollectionReference ref = store.collection("NOTES");
+//        for (Note note: notesArray) {
+//            Map<String, Object> noteMap = NoteMapper.toDocument(note);
+//            ref.document().set(noteMap);
+//        }
     }
 }

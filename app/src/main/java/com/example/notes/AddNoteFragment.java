@@ -99,8 +99,10 @@ public class AddNoteFragment extends Fragment {
         } else {
             int cn = notesArray.getCurrentNote();
             Note newNote = Note.getBuilder().setHeader(editHeader.getText().toString()).setDescription(" ").setNote(editNoteText.getText().toString()).build();
+            newNote.setId(notesArray.getNote(notesArray.getCurrentNote()).getId());
             newNote.setDate(calendar);
             notesArray.getNote(cn).clone(newNote);
+            notesArray.updateNote(notesArray.getNote(notesArray.getCurrentNote()));
         }
     }
 
