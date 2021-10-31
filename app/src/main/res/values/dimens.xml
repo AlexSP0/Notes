@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="nav_header_height">200dp</dimen>
+    <dimen name="nav_header_dimen">42sp</dimen>
+    <dimen name="about_text_size">40sp</dimen>
+    <dimen name="note_header_text_size">20sp</dimen>
+    <dimen name="card_item_size">20sp</dimen>
+    <dimen name="list_item_size">40sp</dimen>
+    <dimen name="card_header_text_size">30sp</dimen>
+    <dimen name="note_image_card_size">60dp</dimen>
+    <dimen name="note_text_card_size">20sp</dimen>
+    <dimen name="note_card_footer_size">20sp</dimen>
+    <dimen name="card_margin">10dp</dimen>
+    <dimen name="add_note_header">40sp</dimen>
+    <dimen name="add_note_date">30sp</dimen>
+    <dimen name="add_note_checkbox_favorite_width">30dp</dimen>
+    <dimen name="add_note_checkbox_favorite_height">30dp</dimen>
+    <dimen name="add_note_text">25sp</dimen>
+</resources>

@@ -1,3 +1,18 @@
 <resources>
     <string name="app_name">notes</string>
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="fragment_navigation">Заметки</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="notes_application_text">Notes Application!</string>
+    <string name="about">About</string>
+    <string name="show_notes_as_cards">Show notes as cards</string>
+    <string name="settings">Settings</string>
+    <string name="add_note_header_hint">Note header</string>
+    <string name="add_note_text_of_note_hint">Text of NOTE</string>
+    <string name="add_note_button_text">add note</string>
+    <string name="title_delete_dialog">WARNING!!!</string>
+    <string name="text_delete_dialog">Note will be DELETED</string>
+    <string name="yes_button_delete_dialog">Understand, delete</string>
+    <string name="no_button_delete_dialog">No, let it be</string>
 </resources>

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item android:title="Send"
+        android:id="@+id/current_note_menu_send"
+        android:orderInCategory="100"
+        app:showAsAction="never"/>
+    <item android:title="Share"
+        android:id="@+id/current_note_menu_share"
+        android:orderInCategory="100"
+        app:showAsAction="never"/>
+</menu>
